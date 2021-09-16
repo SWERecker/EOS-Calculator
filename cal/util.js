@@ -26,7 +26,7 @@ $('#unitConvertAtm').change(function(){
         atm: valAtm
     }
     valPa = calAtmToPa.evaluate(vars);
-    $('#convertResultsUl').append('<li>$' + valAtm + 'atm=' + math.parse(math.format(valPa, 6)).toTex() + 'Pa$</li>');
+    $('#convertResultsUl').append(`<li>$${valAtm}atm=${math.parse(math.format(valPa, 6)).toTex()}Pa$</li>`);
     console.log(valAtm);
     MathJax.typeset();
 });

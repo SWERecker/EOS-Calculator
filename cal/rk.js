@@ -78,13 +78,11 @@ $('#btnCalRK').click(function () {
     let valRKT = null;
     let valRKV = null;
     let valRKP = null;
-    $('#resultRK').html(`<h4 class="uk-heading-divider">结果：</h4>
-            <div id="resultRKContent"></div>
-            <ul class="uk-list uk-list-disc uk-list-emphasis" id="resultSummary"></ul></div>`);
-    let resultSummary = $('#resultSummary');
+    let resultArea = $('#resultRK');
 
     // VT => P
     if (rkMode === 'vtp') {
+        resultArea.html('<div id="resultRKContent"></div>');
         try {
             valRKT = math.evaluate($('#calRKT').val());
             valRKV = math.evaluate($('#calRKV').val());
@@ -101,9 +99,8 @@ $('#btnCalRK').click(function () {
                 R: constR
             }
             const res = calRK.evaluate(vars);
-            resultArea
-                .html('<h4 class="uk-heading-divider">结果：</h4>')
-                .append("$P = " + RKEql.toTex() + "=" + math.parse(math.format(res, 4)).toTex() + " Pa$");
+            $('#resultRKContent')
+                .html(`$P=${RKEql.toTex()}=${math.parse(math.format(res, 4)).toTex()}Pa$`);
             MathJax.typeset();
         } else {
             appNotify('danger', 'V或T数据有误，请检查！');
@@ -113,6 +110,8 @@ $('#btnCalRK').click(function () {
 
     // PT => V
     if (rkMode === 'ptv') {
+        resultArea.html('<div id="resultRKContent"></div>' +
+            '<div class="uk-list uk-list-disc uk-list-emphasis" id="resultRKSummary"></div>');
         try {
             valRKT = math.evaluate($('#calRKT').val());
             valRKP = math.evaluate($('#calRKP').val());
@@ -243,7 +242,7 @@ $('#btnCalRK').click(function () {
             let tableHtml = createResultTable(displayTableHeading, displayTableContent);
 
             $('#resultRKContent').html(tableHtml);
-            resultSummary.append(`<li>迭代次数：$${iterTime}$</li>
+            $('#resultRKSummary').html(`<li>迭代次数：$${iterTime}$</li>
                              <li>最终$|Z_{${iterTime}}- Z_{${(--iterTime)}}|=${math.parse(math.format(finalDeltaZ, 6)).toTex()}$</li>
                              <li>$V=${math.parse(math.format(rkIterMap[(++iterTime)]["V"], 4)).toTex()} ${Vunit}$</li>`);
             MathJax.typeset();
