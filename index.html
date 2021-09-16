@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.3/dist/css/uikit.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@9.4.4/lib/browser/math.js" type="text/javascript"></script>
+  <title>在线状态方程计算器 | Online EOS Calculator</title>
+  <style>
+    html {color: #000;}
+    body {padding-top: 2rem;}
+    .input-padding {padding-top: 0.5rem;}
+  </style>
+</head>
+<body>
+  <div class="uk-container uk-container-small">
+    <h1>立方型状态方程计算</h1>
+    <div>
+      <ul class="uk-child-width-expand" uk-tab>
+        <li class="uk-active"><a href="#">RK</a></li>
+        <li><a href="#">范德华</a></li>
+        <li><a href="#">SRK</a></li>
+        <li><a href="#">PR</a></li>
+      </ul>
+      <ul class="uk-switcher uk-margin">
+        <li>
+          <!-- RK Start-->
+          <h1 class="uk-heading-divider">$RK$方程计算</h1>
+          <div>
+            RK方程：$P=\frac{R\mathrm{T}}{\mathrm{V}-\mathrm{b}}-\frac{ a}{{\mathrm{T}}^{\frac{1}{2}}\cdot\mathrm{V}\left(\mathrm{V}+\mathrm{b}\right)}$
+          </div>
+          <h3 class="uk-heading-divider">计算$a,b$</h3>
+          <div class="uk-flex uk-flex-column">
+            <div class="input-padding">
+              <label class="uk-form-label" for="calRKTc">$T_c(K) = $</label>
+              <input class="uk-input" type="text" id="calRKTc" value="408.1" />
+            </div>
+            <div class="input-padding">
+              <label class="uk-form-label" for="calRKPc">$P_c(Pa) = $</label>
+              <input class="uk-input" type="text" id="calRKPc" value="3.648 * 10 ^ 6" />
+            </div>
+            <div class="input-padding">
+              <button id="btnCalRKab" class="uk-button uk-button-primary uk-width-1-1">
+                计算 RK 方程中的a & b
+              </button>
+            </div>
+          </div>
+          <hr>
+          <div class="uk-card uk-card-body">
+            <div id="calRKa" class="uk-align-center">$a = $</div>
+            <div id="calRKb" class="uk-align-center">$b = $</div>
+          </div>
+          <h3 class="uk-heading-divider">计算$RK$方程</h3>
+
+          <!-- Choose mode -->
+          <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+            <label><input class="uk-radio" type="radio" id="rdVtP" name="radio1" checked> 已知VT，计算P</label>
+            <label><input class="uk-radio" type="radio" id="rdPtV" name="radio1"> 已知PT，计算V</label>
+            <label><input class="uk-radio" type="radio" id="rdPvT" name="radio1"> 已知PV，计算T</label>
+          </div>
+
+          <div class="uk-flex uk-flex-column">
+            <div id="input-rkv" class="input-padding">
+              <label for="calRKV">$V(m^3*mol^{-1}) = $</label>
+              <input class="uk-input" type="text" id="calRKV" placeholder="6.140 * 10 ^ -3"/>
+            </div>
+            <div id="input-rkt" class="input-padding">
+              <label for="calRKT">$T(K) = $</label>
+              <input class="uk-input" type="text" id="calRKT" placeholder="300"/>
+            </div>
+            <div id="input-rkp" class="input-padding" style="display: none">
+              <label for="calRKP">$P(Pa) = $</label>
+              <input class="uk-input" type="text" id="calRKP" placeholder="3.704 * 10 ^ 5"/>
+            </div>
+            <div id="input-rkiter" class="input-padding" style="display: none">
+              <label for="iterTimesRK">$n=$(迭代次数，0为自动)</label>
+              <input class="uk-input" type="text" id="iterTimesRK" value="0"/>
+            </div>
+            <div class="input-padding">
+              <button id="btnCalRK" class="uk-button uk-button-primary uk-width-1-1">计算RK方程</button>
+            </div>
+          </div>
+          <div id="resultRK" class="uk-align-center">
+            <h4 class="uk-heading-divider">结果：</h4>
+            <ul id="resultRKUl"></ul>
+            <ul id="resultSummary"></ul>
+
+          </div>
+          <div style="height: 50px"></div>
+          <!-- RK End-->
+        </li>
+
+        <li>
+          <!-- vdW Start-->
+          <h1 class="uk-heading-divider">范德华方程计算($TODO$)</h1>
+          <div>
+            范德华方程：$P=\frac{RT}{V-b}-\frac{a}{V^2}$
+          </div>
+          <!-- vdW End -->
+        </li>
+
+        <li>
+          <!-- SRK Start-->
+          <h1 class="uk-heading-divider">SRK方程计算($TODO$)</h1>
+          <div>
+            SRK方程：$P=\frac{RT}{V-b}-\frac{a(T)}{V(V+b)}$
+          </div>
+          <!-- SRK End-->
+        </li>
+
+        <li>
+          <!-- PR End-->
+          <h1 class="uk-heading-divider">PR方程计算($TODO$)</h1>
+          <div>
+            PR方程：$P=\frac{RT}{V-b}-\frac{a(T)}{V(V+b)+b(V-b)}$
+          </div>
+          <!-- PR End-->
+        </li>
+
+      </ul>
+    </div>
+    <hr>
+    <h3 class="uk-heading-divider">单位换算 - $atm => Pa$</h3>
+    <div class="input-padding">
+      <label for="unitConvertAtm"></label><input id="unitConvertAtm" class="uk-input" type="text" value="" placeholder="1 * 10 ^ 2">
+      <hr>
+      <div id="convertResults">
+        <ul class="uk-list uk-list-decimal" id="convertResultsUl"></ul>
+      </div>
+      <hr class="uk-divider-icon">
+      <div class="uk-text-center">&copy; Recker 2021</div>
+    </div>
+
+  </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.7.3/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.7.3/dist/js/uikit-icons.min.js"></script>
+<script src="./cal/util.js"></script>
+<script src="./cal/rk.js"></script>
+<script type="text/javascript">
+  /**
+   * Tr = T/Tc
+   **/
+
+
+  // vdW
+  const vdWaEql = math.parse('(27 * R ^ 2 * Tc ^ 2) / (64 * Pc)');
+  const vdWbEql = math.parse('(R * Tc) / (8 * Pc)');
+  const vdWEql = math.parse('(R * T / (V - b)) - (a / V ^ 2)');
+  const calvdWa = vdWaEql.compile();
+  const calvdWb = vdWbEql.compile();
+  const calvdW = vdWEql.compile();
+
+  // SRK
+  const SRKEql = math.parse('(R*T)/(V-b) - aT/(V*(V+b))');
+  const SRKaT = math.parse('(1 + (0.48+1.574*w - 0.176*w^2) * (1 - Tr^0.5)) ^ 2');
+  const SRKb = math.parse('(0.08664 * R * Tc) / Pc');
+  const calSRK = SRKEql.compile();
+  const calSRKaT = SRKaT.compile();
+  const calSRKb = SRKb.compile();
+
+  // PR
+  const PREql = math.parse('(R*T)/(V-b) - aT/(V*(V+b) + b*(V-b))');
+  const calPR = PREql.compile();
+
+
+  let vdWa = null;
+  let vdWb = null;
+
+</script>
+</html>
