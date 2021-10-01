@@ -58,3 +58,23 @@ $('#btnCalVdWab').click(function () {
     $('#calVdWb').html("$b=" + math.parse(math.format(vdWb, 4)).toTex() + Vunit + "$");
     MathJax.typeset();
 });
+
+
+$("#vdw-predefined").change(function() {
+    let selected = this.selectedIndex - 1;
+    let inputTc = $('#calVdWTc');
+    let inputPc = $('#calVdWPc');
+    if (selected < 0) {
+        inputTc.val('');
+        inputPc.val('');
+        vdWa = null;
+        vdWb = null;
+        $('#calVdWa').html('$a=$');
+        $('#calVdWb').html('$b=$');
+        MathJax.typeset();
+        return;
+    }
+    inputTc.val(predef_data[selected].Tc);
+    inputPc.val(predef_data[selected].Pc);
+    $('#btnCalVdWab').click();
+});

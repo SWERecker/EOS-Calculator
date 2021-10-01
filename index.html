@@ -18,6 +18,30 @@
         .input-padding {
             padding-top: 0.5rem;
         }
+
+        .switch-theme {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: #1e87f0;
+        }
+        .switch-theme-dark {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
     </style>
 </head>
 <body>
@@ -60,7 +84,7 @@
                     </div>
                 </div>
                 <hr>
-                <div class="uk-card uk-card-body">
+                <div class="uk-card uk-card-default uk-card-body">
                     <div id="calRKa" class="uk-align-center">$a=$</div>
                     <div id="calRKb" class="uk-align-center">$b=$</div>
                 </div>
@@ -99,9 +123,8 @@
                 </div>
                 <div class="uk-align-center">
                     <h4 class="uk-heading-divider">结果：</h4>
-                    <div id="resultRK"></div>
+                    <div id="resultRK" class="uk-card uk-card-default uk-card-body"></div>
                 </div>
-                <div style="height: 50px"></div>
             </li>
             <!-- RK End-->
 
@@ -114,6 +137,12 @@
                 <hr>
                 <h3 class="uk-heading-divider">计算$a,b$</h3>
                 <div class="uk-flex uk-flex-column">
+                    <div class="input-padding">
+                        <label class="uk-form-label" for="rk-predefined">选择预设</label>
+                        <select class="uk-select" id="vdw-predefined">
+                            <option>请选择或输入</option>
+                        </select>
+                    </div>
                     <div class="input-padding">
                         <label class="uk-form-label" for="calVdWTc">$T_c(K) = $</label>
                         <input class="uk-input" type="text" id="calVdWTc" value="408.1"/>
@@ -129,7 +158,7 @@
                     </div>
                 </div>
                 <hr>
-                <div class="uk-card uk-card-body">
+                <div class="uk-card uk-card-default uk-card-body">
                     <div id="calVdWa" class="uk-align-center">$a = $</div>
                     <div id="calVdWb" class="uk-align-center">$b = $</div>
                 </div>
@@ -175,7 +204,9 @@
         <div class="uk-text-center">&copy; Recker 2021</div>
 
     </div>
-
+    <div uk-tooltip="切换深色模式" class="switch-theme" id="dark">
+        <img src="./resource/moon.svg" id="dark-icon"  alt="Dark Mode switch" height="32" width="32"/>
+    </div>
 </div>
 </body>
 
