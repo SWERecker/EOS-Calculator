@@ -1,12 +1,15 @@
 // RK: VT=>P
-const RKaEql = math.parse('(0.42748 * (R ^ 2 * Tc ^ 2.5)) / Pc');
-const RKbEql = math.parse('0.08664 * (R * Tc / Pc)');
-const RKEql = math.parse('(R * T)/(V-b) - a / (T^(1/2) * V * (V + b))');
+const RKaEql = math.parse('0.42748 * ((R^2 * Tc^2.5) / (Pc * 10^6))');
+const RKbEql = math.parse('0.08664 * ((R * Tc) / (Pc * 10^6))');
+const RKEql = math.parse('(R * T)/(V - b) - a / (T^(1/2) * V * (V + b))');
 
 // RK: PT=>V
 const RKV0Eql = math.parse('R * T / p');
-const RKVIterEql = math.parse('((R * T)/p) + b - (a*(V-b))/(p*T^(0.5)*V*(V+b))');
-const RKZEql = math.parse('(p*V)/(R*T)');
+const RKVIterEql = math.parse('((R * T) / p) + b - (a*(V-b)) / (p * T^(0.5) * V * (V + b))');
+const RKZEql = math.parse('(p * V) / (R * T)');
+
+// RK: PV=>T
+
 
 const calRKa = RKaEql.compile();
 const calRKb = RKbEql.compile();
@@ -14,6 +17,8 @@ const calRK = RKEql.compile();
 const calRKV0 = RKV0Eql.compile();
 const calRKIter = RKVIterEql.compile();
 const calRKZ = RKZEql.compile();
+
+const RKaUnit = 'Pa\\cdot\\mathrm{m}^6\\cdot\\mathrm{K}^{0.5}\\mathrm{mol}^{-2}'
 
 let RKa = null;
 let RKb = null;
@@ -65,8 +70,8 @@ $('#btnCalRKab').click(function () {
     // console.log(vars);
     RKa = calRKa.evaluate(vars);
     RKb = calRKb.evaluate(vars);
-    $('#calRKa').html("$a=" + math.parse(math.format(RKa, 4)).toTex() + RKaUnit + "$");
-    $('#calRKb').html("$b=" + math.parse(math.format(RKb, 4)).toTex() + Vunit + "$");
+    $('#calRKa').html("$a=" + RKaEql.toTex() + "=" + math.parse(math.format(RKa, 4)).toTex() + RKaUnit + "$");
+    $('#calRKb').html("$b=" + RKbEql.toTex() + "=" + math.parse(math.format(RKb, 4)).toTex() + Vunit + "$");
     MathJax.typeset();
 });
 
@@ -145,20 +150,13 @@ $('#btnCalRK').click(function () {
             let iterTime = 0;
             if (iterTimes === 0) {
                 while (math.abs(Zn_1 - Zn) > 0.0001) {
-                    let varV = {
-                        a: RKa,
-                        b: RKb,
-                        T: valRKT,
-                        p: valRKP,
-                        R: constR
-                    }
                     // 代入上个迭代的V，储存Zn
-                    varV.V = rkIterMap[iterTime]["V"];
+                    vars.V = rkIterMap[iterTime]["V"];
                     Zn = rkIterMap[iterTime]["Z"];
                     // console.log(`Iter times = ${iterTime} Zn+1 = ${Zn_1} | Zn = ${Zn}`);
                     iterTime++;
                     // 计算下一个V
-                    let Vnext = calRKIter.evaluate(varV);
+                    let Vnext = calRKIter.evaluate(vars);
                     // 储存每次迭代的V
                     rkIterMap[iterTime] = {};
                     rkIterMap[iterTime]["V"] = Vnext;
@@ -166,13 +164,8 @@ $('#btnCalRK').click(function () {
                     // 计算|Zn+1 - Zn|
                     // Z1 = pV1/RT
                     // Z0 = pV0/RT
-                    let varZ = {
-                        T: valRKT,
-                        p: valRKP,
-                        V: Vnext,
-                        R: constR
-                    }
-                    Zn_1 = calRKZ.evaluate(varZ);
+                    vars.V = Vnext;
+                    Zn_1 = calRKZ.evaluate(vars);
                     rkIterMap[iterTime]["Z"] = Zn_1;
                     if (iterTime > 100) {
                         appNotify('danger', '迭代次数过多，请检查数据！');
@@ -187,20 +180,13 @@ $('#btnCalRK').click(function () {
                     return;
                 }
                 while (iterTimes > 0) {
-                    let varV = {
-                        a: RKa,
-                        b: RKb,
-                        T: valRKT,
-                        p: valRKP,
-                        R: constR
-                    }
                     // 代入上个迭代的V，储存Zn
-                    varV.V = rkIterMap[iterTime]["V"];
+                    vars.V = rkIterMap[iterTime]["V"];
                     Zn = rkIterMap[iterTime]["Z"];
                     // console.log(`Iter times = ${iterTime} Zn+1 = ${Zn_1} | Zn = ${Zn}`);
                     iterTime++;
                     // 计算下一个V
-                    let Vnext = calRKIter.evaluate(varV);
+                    let Vnext = calRKIter.evaluate(vars);
                     // 储存每次迭代的V
                     rkIterMap[iterTime] = {};
                     rkIterMap[iterTime]["V"] = Vnext;
@@ -208,13 +194,8 @@ $('#btnCalRK').click(function () {
                     // 计算|Zn+1 - Zn|
                     // Z1 = pV1/RT
                     // Z0 = pV0/RT
-                    let varZ = {
-                        T: valRKT,
-                        p: valRKP,
-                        V: Vnext,
-                        R: constR
-                    }
-                    Zn_1 = calRKZ.evaluate(varZ);
+                    vars.V = Vnext;
+                    Zn_1 = calRKZ.evaluate(vars);
                     rkIterMap[iterTime]["Z"] = Zn_1;
                     iterTimes--;
                     // console.log(iterTimes);
@@ -263,9 +244,39 @@ $('#btnCalRK').click(function () {
             return;
         }
         if (typeof valRKP == "number" && typeof valRKV == "number") {
-            appNotify('danger', 'TODO');
+            let vars = {
+                R: constR,
+                P: valRKV,
+                V: valRKV,
+                a: RKa,
+                b: RKb
+            }
+            let f = math.parse('(R * T)/(V-b) - a / (T^(1/2) * V * (V + b))');
+            let transformed = f.transfromVars(vars, "T");
+            console.log(transformed.toString());
+            resultArea.html('$' + math.parse(transformed.toString()).toTex() + '$');
+            MathJax.typeset();
         } else {
             appNotify('danger', 'V或P数据有误，请检查！');
         }
     }
+});
+
+$("#rk-predefined").change(function() {
+    let selected = this.selectedIndex - 1;
+    let inputTc = $('#calRKTc');
+    let inputPc = $('#calRKPc');
+    if (selected < 0) {
+        inputTc.val('');
+        inputPc.val('');
+        RKa = null;
+        RKb = null;
+        $('#calRKa').html('$a=$');
+        $('#calRKb').html('$b=$');
+        MathJax.typeset();
+        return;
+    }
+    inputTc.val(predef_data[selected].Tc);
+    inputPc.val(predef_data[selected].Pc);
+    $('#btnCalRKab').click();
 });
