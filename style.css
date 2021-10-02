@@ -1,5 +1,6 @@
 html {
     color: #000;
+    transition: 300ms;
 }
 
 body {
@@ -12,9 +13,20 @@ body {
 
 .switch-theme {
     background-color: #1e87f0;
+    transition: 200ms;
 }
+
+.switch-theme:hover {
+    background-color: #0b79e8;
+}
+
 .switch-theme-dark {
     background-color: #fff;
+    transition: 200ms;
+}
+
+.switch-theme-dark:hover {
+    background-color: #e0e0e0;
 }
 
 .switch-theme-btn {
@@ -41,4 +53,17 @@ body {
 
 .uk-card-default {
     color: #000 !important;
+    transition: 200ms;
+}
+
+.uk-card-secondary{
+    transition: 200ms;
+}
+
+.uk-background-secondary{
+    transition: 200ms;
+}
+
+.uk-background-default{
+    transition: 200ms;
 }

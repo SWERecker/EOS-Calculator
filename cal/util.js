@@ -101,7 +101,12 @@ predef_data = [
     {"name": "新戊烷", "Tc": 433.8, "Pc": 3.202},
     {"name": "正己烷", "Tc": 507.4, "Pc": 2.969},
     {"name": "正庚烷", "Tc": 540.2, "Pc": 2.736},
-    {"name": "正辛烷", "Tc": 568.8, "Pc": 2.482}
+    {"name": "正辛烷", "Tc": 568.8, "Pc": 2.482},
+    {"name": "乙烯", "Tc": 282.4, "Pc": 5.306},
+    {"name": "丙烯", "Tc": 365.0, "Pc": 4.620},
+    {"name": "1-丁烯", "Tc": 419.6, "Pc": 4.023},
+    {"name": "顺-2-丁烯", "Tc": 435.6, "Pc": 4.205},
+    {"name": "反-2-丁烯", "Tc": 428.6, "Pc": 4.104}
 ]
 
 function getCookie(cname) {
@@ -120,7 +125,7 @@ $().ready(function () {
         $('#dark').click();
     }
         predef_data.forEach(function (obj, index) {
-            $("#rk-predefined").appendOption(index + " - " + obj.name);
-            $("#vdw-predefined").appendOption(index + " - " + obj.name);
+            $("#rk-predefined").appendOption(obj.name);
+            $("#vdw-predefined").appendOption(obj.name);
         });
 })

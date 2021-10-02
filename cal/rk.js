@@ -30,7 +30,7 @@ $('#rdVtP').click(function () {
     $('#input-rkv').show();
     $('#input-rkt').show();
     $('#input-rkp').hide();
-    $('#input-rkiter').hide();
+    $('#input-rkIter').hide();
 });
 
 $('#rdPtV').click(function () {
@@ -38,7 +38,7 @@ $('#rdPtV').click(function () {
     $('#input-rkp').show();
     $('#input-rkt').show();
     $('#input-rkv').hide();
-    $('#input-rkiter').show();
+    $('#input-rkIter').show();
 });
 
 $('#rdPvT').click(function () {
@@ -46,7 +46,7 @@ $('#rdPvT').click(function () {
     $('#input-rkp').show();
     $('#input-rkv').show();
     $('#input-rkt').hide();
-    $('#input-rkiter').show();
+    $('#input-rkIter').show();
 });
 
 /**

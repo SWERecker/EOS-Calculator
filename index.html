@@ -12,7 +12,7 @@
 <div class="uk-container uk-container-small">
     <h1>立方型状态方程计算</h1>
     <div>
-        <ul class="uk-child-width-expand" uk-tab>
+        <ul class="uk-child-width-expand" uk-tab="animation: uk-animation-fade; duration: 100">
             <li class="uk-active"><a href="#">RK</a></li>
             <li><a href="#">范德华</a></li>
             <li><a href="#">SRK</a></li>
@@ -77,7 +77,7 @@
                         <input class="uk-input" type="text" id="calRKP" placeholder="3.704 * 10 ^ 5"
                                value="3.704 * 10 ^ 5"/>
                     </div>
-                    <div id="input-rkiter" class="input-padding" style="display: none">
+                    <div id="input-rkIter" class="input-padding" style="display: none">
                         <label for="iterTimesRK">$n=$(迭代次数，0为自动)</label>
                         <input class="uk-input" type="text" id="iterTimesRK" value="0"/>
                     </div>
@@ -125,6 +125,43 @@
                 <div class="uk-card uk-card-default uk-card-body">
                     <div id="calVdWa" class="uk-align-center">$a = $</div>
                     <div id="calVdWb" class="uk-align-center">$b = $</div>
+                </div>
+
+                <h3 class="uk-heading-divider">计算范德华方程</h3>
+
+                <!-- Choose mode -->
+                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                    <label><input class="uk-radio" type="radio" id="vdWVtP" name="radio2" checked> 已知VT，计算P</label>
+                    <label><input class="uk-radio" type="radio" id="vdWPtV" name="radio2"> 已知PT，计算V</label>
+                    <label><input class="uk-radio" type="radio" id="vdWPvT" name="radio2"> 已知PV，计算T</label>
+                </div>
+
+                <div class="uk-flex uk-flex-column">
+                    <div id="input-vdWv" class="input-padding">
+                        <label for="calVdWV">$V(m^3*mol^{-1}) = $</label>
+                        <input class="uk-input" type="text" id="calVdWV" placeholder="6.140 * 10 ^ -3"
+                               value="6.140 * 10 ^ -3"/>
+                    </div>
+                    <div id="input-vdWt" class="input-padding">
+                        <label for="calVdWT">$T(K) = $</label>
+                        <input class="uk-input" type="text" id="calVdWT" placeholder="300" value="300"/>
+                    </div>
+                    <div id="input-vdWp" class="input-padding" style="display: none">
+                        <label for="calVdWP">$P(Pa) = $</label>
+                        <input class="uk-input" type="text" id="calVdWP" placeholder="3.704 * 10 ^ 5"
+                               value="3.704 * 10 ^ 5"/>
+                    </div>
+                    <div id="input-vdwIter" class="input-padding" style="display: none">
+                        <label for="iterTimesVdW">$n=$(迭代次数，0为自动)</label>
+                        <input class="uk-input" type="text" id="iterTimesVdW" value="0"/>
+                    </div>
+                    <div class="input-padding">
+                        <button id="btnCalVdW" class="uk-button uk-button-primary uk-width-1-1">计算范德华方程</button>
+                    </div>
+                </div>
+                <div class="uk-align-center">
+                    <h4 class="uk-heading-divider">结果：</h4>
+                    <div id="resultVdW" class="uk-card uk-card-default uk-card-body"></div>
                 </div>
             </li>
             <!-- vdW End -->

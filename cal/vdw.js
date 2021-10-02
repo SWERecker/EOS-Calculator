@@ -17,6 +17,7 @@ $('#vdWVtP').click(function () {
     $('#input-vdWv').show();
     $('#input-vdWt').show();
     $('#input-vdWp').hide();
+    $('#input-vdwIter').hide();
 });
 
 $('#vdWPtV').click(function () {
@@ -24,6 +25,7 @@ $('#vdWPtV').click(function () {
     $('#input-vdWp').show();
     $('#input-vdWt').show();
     $('#input-vdWv').hide();
+    $('#input-vdwIter').show();
 });
 
 $('#vdWPvT').click(function () {
@@ -31,6 +33,7 @@ $('#vdWPvT').click(function () {
     $('#input-vdWp').show();
     $('#input-vdWv').show();
     $('#input-vdWt').hide();
+    $('#input-vdwIter').show();
 });
 
 /**
