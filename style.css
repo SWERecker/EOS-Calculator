@@ -1,0 +1,44 @@
+html {
+    color: #000;
+}
+
+body {
+    padding-top: 2rem;
+}
+
+.input-padding {
+    padding-top: 0.5rem;
+}
+
+.switch-theme {
+    background-color: #1e87f0;
+}
+.switch-theme-dark {
+    background-color: #fff;
+}
+
+.switch-theme-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.switch-theme-btn-size {
+    width: 28px;
+    height: 28px;
+    padding: 10px;
+}
+
+@media (min-width: 1136px) {
+    .switch-theme-btn-size {
+        width: 32px;
+        height: 32px;
+        padding: 20px;
+    }
+}
+
+.uk-card-default {
+    color: #000 !important;
+}

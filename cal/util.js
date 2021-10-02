@@ -18,14 +18,14 @@ $('#dark').click(function () {
         $('.uk-card').attr('class', 'uk-card uk-card-secondary uk-card-body');
         document.cookie = `theme=dark; expires=${cookieExpireDate}`
         $('#dark-icon').attr("src", "./resource/sun.svg")
-        $('#dark').attr("class", "switch-theme-dark")
+        $('#dark').attr("class", "switch-theme-btn switch-theme-btn-size switch-theme-dark")
     } else {
         darkMode = false
         $('body').attr('class', 'uk-background-default')
         $('.uk-card').attr('class', 'uk-card uk-card-default uk-card-body');
         document.cookie = `theme=light; expires=${cookieExpireDate}`
         $('#dark-icon').attr("src", "./resource/moon.svg")
-        $('#dark').attr("class", "switch-theme")
+        $('#dark').attr("class", "switch-theme-btn switch-theme-btn-size switch-theme")
     }
 })
 
@@ -35,9 +35,13 @@ $('#unitConvertAtm').change(function () {
     try {
         valAtm = math.evaluate($('#unitConvertAtm').val())
     } catch (e) {
+        appNotify('danger', '数据输入有误！');
         return;
     }
     typeof valAtm != "undefined" ? valAtm = valAtm : valAtm = 0;
+    if (valAtm === 0) {
+        return;
+    }
     let calAtmToPa = math.parse('0.101325 * atm * 10^6').compile();
     let vars = {
         atm: valAtm
@@ -89,7 +93,15 @@ $.fn.appendOption = function (option) {
 predef_data = [
     {"name": "甲烷", "Tc": 190.6, "Pc": 4.600},
     {"name": "乙烷", "Tc": 305.4, "Pc": 4.884},
-    {"name": "丙烷", "Tc": 369.8, "Pc": 4.246}
+    {"name": "丙烷", "Tc": 369.8, "Pc": 4.246},
+    {"name": "正丁烷", "Tc": 425.2, "Pc": 3.800},
+    {"name": "异丁烷", "Tc": 408.1, "Pc": 3.648},
+    {"name": "正戊烷", "Tc": 469.6, "Pc": 3.374},
+    {"name": "异戊烷", "Tc": 460.4, "Pc": 3.384},
+    {"name": "新戊烷", "Tc": 433.8, "Pc": 3.202},
+    {"name": "正己烷", "Tc": 507.4, "Pc": 2.969},
+    {"name": "正庚烷", "Tc": 540.2, "Pc": 2.736},
+    {"name": "正辛烷", "Tc": 568.8, "Pc": 2.482}
 ]
 
 function getCookie(cname) {

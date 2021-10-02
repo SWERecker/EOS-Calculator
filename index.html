@@ -4,45 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.3/dist/css/uikit.min.css"/>
+    <link rel="stylesheet" href="./style.css"/>
     <script src="https://cdn.jsdelivr.net/npm/mathjs@9.4.4/lib/browser/math.js" type="text/javascript"></script>
     <title>在线状态方程计算器 | Online EOS Calculator</title>
-    <style>
-        html {
-            color: #000;
-        }
-
-        body {
-            padding-top: 2rem;
-        }
-
-        .input-padding {
-            padding-top: 0.5rem;
-        }
-
-        .switch-theme {
-            position: fixed;
-            width: 32px;
-            height: 32px;
-            bottom: 2rem;
-            right: 2rem;
-            padding: 20px;
-            border-radius: 50%;
-            cursor: pointer;
-            background-color: #1e87f0;
-        }
-        .switch-theme-dark {
-            position: fixed;
-            width: 32px;
-            height: 32px;
-            bottom: 2rem;
-            right: 2rem;
-            padding: 20px;
-            border-radius: 50%;
-            cursor: pointer;
-            background-color: #fff;
-        }
-
-    </style>
 </head>
 <body>
 <div class="uk-container uk-container-small">
@@ -204,7 +168,7 @@
         <div class="uk-text-center">&copy; Recker 2021</div>
 
     </div>
-    <div uk-tooltip="切换深色模式" class="switch-theme" id="dark">
+    <div uk-tooltip="切换深色模式" class="switch-theme-btn switch-theme-btn-size switch-theme" id="dark">
         <img src="./resource/moon.svg" id="dark-icon"  alt="Dark Mode switch" height="32" width="32"/>
     </div>
 </div>

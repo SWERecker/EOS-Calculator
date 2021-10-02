@@ -54,8 +54,8 @@ $('#btnCalVdWab').click(function () {
     console.log(vars);
     vdWa = calvdWa.evaluate(vars);
     vdWb = calvdWb.evaluate(vars);
-    $('#calVdWa').html("$a=" + math.parse(math.format(vdWa, 4)).toTex() + vdWaUnit + "$");
-    $('#calVdWb').html("$b=" + math.parse(math.format(vdWb, 4)).toTex() + Vunit + "$");
+    $('#calVdWa').html("$a=" + vdWaEql.toTex() + "=" + math.parse(math.format(vdWa, 4)).toTex() + vdWaUnit + "$");
+    $('#calVdWb').html("$b=" + vdWbEql.toTex() + "=" + math.parse(math.format(vdWb, 4)).toTex() + Vunit + "$");
     MathJax.typeset();
 });
 
