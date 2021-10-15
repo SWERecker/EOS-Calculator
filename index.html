@@ -25,7 +25,7 @@
                 <div>
                     RK方程：$P=\frac{R\mathrm{T}}{\mathrm{V}-\mathrm{b}}-\frac{a}{{\mathrm{T}}^{\frac{1}{2}}\cdot\mathrm{V}\left(\mathrm{V}+\mathrm{b}\right)}$
                 </div>
-                <h3 class="uk-heading-divider">计算$a,b$</h3>
+                <h3 class="uk-heading-divider">$a,b$&nbsp;计算</h3>
                 <div class="uk-flex uk-flex-column">
                     <div class="input-padding">
                         <label class="uk-form-label" for="rk-predefined">选择预设</label>
@@ -53,7 +53,7 @@
                     <div id="calRKb" class="uk-align-center">$b=$</div>
                 </div>
 
-                <h3 class="uk-heading-divider">计算$RK$方程</h3>
+                <h3 class="uk-heading-divider">方程计算</h3>
 
                 <!-- Choose mode -->
                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
@@ -62,7 +62,13 @@
                     <label><input class="uk-radio" type="radio" id="rdPvT" name="radio1"> 已知PV，计算T</label>
                 </div>
 
+                <hr>
+
                 <div class="uk-flex uk-flex-column">
+                    <div id="solveMethod" class="uk-margin uk-grid-small uk-child-width-auto uk-grid" style="display: none">
+                        <label><input class="uk-radio" type="radio" id="ptvIter" name="radio3" checked> 迭代法</label>
+                        <label><input class="uk-radio" type="radio" id="ptvCubic" name="radio3"> 解方程法</label>
+                    </div>
                     <div id="input-rkv" class="input-padding">
                         <label for="calRKV">$V(m^3*mol^{-1}) = $</label>
                         <input class="uk-input" type="text" id="calRKV" placeholder="6.140 * 10 ^ -3"
@@ -135,7 +141,6 @@
                     <label><input class="uk-radio" type="radio" id="vdWPtV" name="radio2"> 已知PT，计算V</label>
                     <label><input class="uk-radio" type="radio" id="vdWPvT" name="radio2"> 已知PV，计算T</label>
                 </div>
-
                 <div class="uk-flex uk-flex-column">
                     <div id="input-vdWv" class="input-padding">
                         <label for="calVdWV">$V(m^3*mol^{-1}) = $</label>
@@ -219,4 +224,5 @@
 <script src="./cal/util.js"></script>
 <script src="./cal/rk.js"></script>
 <script src="./cal/vdw.js"></script>
+<script src="./cal/eql.js"></script>
 </html>
