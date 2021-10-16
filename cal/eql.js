@@ -1,4 +1,4 @@
-function cubicSolve(a, b, c, d)
+async function cubicSolve(a, b, c, d)
 {
     let result = {};
     if (a === 0)
@@ -63,4 +63,39 @@ function cubicSolve(a, b, c, d)
     return result;
 }
 
-console.log(cubicSolve(2, 4, 5, 10))
+function cubicToTex(third, second, first, regular) {
+    let cubicEquation;
+    if (math.equal(third, 1)) {
+        cubicEquation = 'V^3';
+    } else {
+        cubicEquation = `${third}V^3`;
+    }
+
+    if (math.larger(second, 0)) {
+        if (math.equal(second, 1)) {
+            cubicEquation += `+V^2`;
+        }
+        cubicEquation += `+${second}V^2`;
+    } else {
+        cubicEquation += `${second}V^2`;
+    }
+
+    if (math.larger(first, 0)) {
+        if (math.equal(first, 1)) {
+            cubicEquation += `+V`;
+        }
+        cubicEquation += `+${first}V`;
+    } else {
+        if (math.equal(first, -1)) {
+            cubicEquation += `-V`;
+        }
+        cubicEquation += `${first}V`;
+    }
+
+    if (math.larger(regular, 0)) {
+        cubicEquation += `+${regular}`;
+    } else {
+        cubicEquation += regular;
+    }
+    return math.parse(cubicEquation.replace('e', '^')).toTex();
+}
