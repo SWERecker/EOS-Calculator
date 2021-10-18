@@ -1,4 +1,4 @@
-const constR = math.evaluate('8.314');
+const constR = math.evaluate('8.31446261815324');
 let Vunit = '\\mathrm{m}^3\\cdot\\mathrm{mol}^{-1}';
 let darkMode = false;
 let cookieExpireDate = (new Date("2077/1/14 05:14:19")).toGMTString();

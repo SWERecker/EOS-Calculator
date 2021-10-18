@@ -3,26 +3,36 @@ const RKaEql = math.parse('0.42748 * ((R^2 * Tc^2.5) / (Pc * 10^6))');
 const RKbEql = math.parse('0.08664 * ((R * Tc) / (Pc * 10^6))');
 const RKaTex = '0.42748\\frac{R^{2} T_c^{2.5}}{P_c}';
 const RKbTex = '0.08664\\frac{R T_c}{P_c}';
+const calRKa = RKaEql.compile();
+const calRKb = RKbEql.compile();
+
 
 // RK: VT=>P
 const RKEql = math.parse('(R * T)/(V - b) - a / (T^(1/2) * V * (V + b))');
 const RKTex = 'P=\\frac{RT}{V-b}-\\frac{a}{T^{\\frac{1}{2}} V (V+b)}';
+const calRK = RKEql.compile();
 
 
 // RK: PT=>V
 const RKV0Eql = math.parse('R * T / p');
 const RKVIterEql = math.parse('((R * T) / p) + b - (a*(V-b)) / (p * T^(0.5) * V * (V + b))');
 const RKZEql = math.parse('(p * V) / (R * T)');
+const calRKV0 = RKV0Eql.compile();
+const calRKVIter = RKVIterEql.compile();
+const calRKZ = RKZEql.compile();
+
 
 // RK: PV=>T
-
-
-const calRKa = RKaEql.compile();
-const calRKb = RKbEql.compile();
-const calRK = RKEql.compile();
-const calRKV0 = RKV0Eql.compile();
-const calRKIter = RKVIterEql.compile();
-const calRKZ = RKZEql.compile();
+// const RKT0Eql = math.parse('p * V / R');
+//const RKTIterEql = math.parse('(Pr + (a / (sqrt(Tr) * Vr * (Vr + b)))) * (Vr - b)');
+const RKTIterEql = math.parse('(Pr+a/(sqrt(Tr)*Vr*(Vr+b)))*(Vr-b)')
+const RKTTr = math.parse('T/Tc');
+const RKTPr = math.parse('P/Pc');
+const RKTVr = math.parse('(V*Pc) / (R*Tc)');
+const calRKTIter = RKTIterEql.compile();
+const calRKTTr = RKTTr.compile();
+const calRKTPr = RKTPr.compile();
+const calRKTVr = RKTVr.compile();
 
 const RKaUnit = 'Pa\\cdot\\mathrm{m}^6\\cdot\\mathrm{K}^{0.5}\\mathrm{mol}^{-2}'
 
@@ -38,6 +48,8 @@ $('#rdVtP').click(function () {
     $('#input-rkt').show();
     $('#input-rkp').hide();
     $('#input-rkIter').hide();
+    $('#solveMethod').hide();
+
 });
 
 $('#rdPtV').click(function () {
@@ -55,6 +67,7 @@ $('#rdPvT').click(function () {
     $('#input-rkv').show();
     $('#input-rkt').hide();
     $('#input-rkIter').show();
+    $('#solveMethod').hide();
 });
 
 $('#ptvIter').click(function () {
@@ -122,7 +135,7 @@ $('#btnCalRK').click(function () {
             const res = calRK.evaluate(vars);
             resultArea.html('<div id="resultRKContent"></div>');
             $('#resultRKContent')
-                .html(`$${RKTex}=${math.parse(math.format(res, 4)).toTex()}Pa$`);
+                .html(`$${RKTex}=${math.parse(math.format(res, 6)).toTex()}Pa$`);
             MathJax.typeset();
         } else {
             appNotify('danger', 'V或T数据有误，请检查！');
@@ -181,7 +194,7 @@ $('#btnCalRK').click(function () {
                 let iterTimes = parseInt($('#iterTimesRK').val());
                 !isNaN(iterTimes) ? iterTimes = iterTimes : iterTimes = 0;
 
-                iterSolve(iterTimes, vars)
+                iterSolveV(iterTimes, vars)
                     .then(iterResult => {
                         let rkIterMap = iterResult['iterMap'];
                         let iterTime = iterResult['iterTime'];
@@ -224,18 +237,21 @@ $('#btnCalRK').click(function () {
             return;
         }
         if (typeof valRKP == "number" && typeof valRKV == "number") {
+            let PcPa = math.evaluate('Pc * 10^6', {Pc: $('#calRKPc').val()})
             let vars = {
                 R: constR,
-                p: valRKV,
+                P: valRKP,
                 V: valRKV,
-                a: RKa,
-                b: RKb
+                a: 0.4274802335403414,
+                b: 0.08664034996495773,
+                Tc: math.evaluate($('#calRKTc').val()),
+                Pc: PcPa,
+                Tr: 1
             }
-            // let f = math.simplify('V^3 - ((R*T)/p)*V^2 + (a/T^(0.5) - b*R*T - p*b^2)*V - (a*b)/(p*T^(1/2))', vars, {exactFractions: true});
+            iterSolveT(0, vars).then(r =>{
+                console.log('PVT OK.');
+            })
 
-            // let transformed = f.transfromVars(vars, "x");
-            // console.log(f.toString());
-            // resultArea.html('$' + math.parse(math.rationalize(math.parse(transformed.toString()))).toTex() + '$');
             MathJax.typeset();
         } else {
             appNotify('danger', 'V或P数据有误，请检查！');
@@ -344,7 +360,7 @@ async function rkCubicSolveV(vars) {
         })
 }
 
-async function iterSolve(iterTimes, vars) {
+async function iterSolveV(iterTimes, vars) {
     let Zn_1 = 999;
     let Zn = 1;
     let deltaZ = 0;
@@ -358,7 +374,7 @@ async function iterSolve(iterTimes, vars) {
     // 计算初值
     vars.V = calRKV0.evaluate(vars);
     // 记录迭代数据
-    let rkIterMap = {
+    let iterMap = {
         "0": {
             "V": vars.V,
             "Z": 1
@@ -366,23 +382,23 @@ async function iterSolve(iterTimes, vars) {
     }
 
     while (true) {
-        vars.V = rkIterMap[iterTime]["V"];
-        Zn = rkIterMap[iterTime]["Z"];
+        vars.V = iterMap[iterTime]["V"];
+        Zn = iterMap[iterTime]["Z"];
         console.debug(`Iter times = ${iterTime} Zn+1 = ${Zn_1} | Zn = ${Zn}`);
         // 迭代次数+1
         iterTime++;
         // 计算下一个V
-        let Vnext = calRKIter.evaluate(vars);
+        let Vnext = calRKVIter.evaluate(vars);
         // 储存每次迭代的V
-        rkIterMap[iterTime] = {};
-        rkIterMap[iterTime]["V"] = Vnext;
+        iterMap[iterTime] = {};
+        iterMap[iterTime]["V"] = Vnext;
 
         // 计算ΔZ
         // Z1 = pV1/RT
         // Z0 = pV0/RT
         vars.V = Vnext;
         Zn_1 = calRKZ.evaluate(vars);
-        rkIterMap[iterTime]["Z"] = Zn_1;
+        iterMap[iterTime]["Z"] = Zn_1;
 
         // 记录迭代结束的ΔZ
         deltaZ = math.abs(Zn_1 - Zn);
@@ -395,7 +411,7 @@ async function iterSolve(iterTimes, vars) {
         }
 
         if (iterTimes === 0) {
-            if (math.smaller(math.abs(Zn_1 - Zn), 0.0001)) {
+            if (math.smaller(math.abs(Zn_1 - Zn), 0.00001)) {
                 break;
             }
         } else {
@@ -415,6 +431,36 @@ async function iterSolve(iterTimes, vars) {
     return {
         "iterTime": iterTime,
         "deltaZ": math.parse(math.format(deltaZ, 6)),
-        "iterMap": rkIterMap
+        "iterMap": iterMap
     };
+}
+
+async function iterSolveT(iterTimes, vars) {
+    // Tr 初值为1
+    vars.Pr = calRKTPr.evaluate(vars);
+    vars.Vr = calRKTVr.evaluate(vars);
+    console.log(vars);
+    let iterTime = 0;
+    let iterMap = {
+        "0": {
+            Tr: 1
+        }
+    }
+    while(true) {
+        vars.Tr = iterMap[iterTime]["Tr"];
+        let TrNext = calRKTIter.evaluate(vars);
+        iterTime++;
+        iterMap[iterTime] = {};
+        iterMap[iterTime]["Tr"] = TrNext;
+
+        if (math.smaller(math.abs(math.evaluate('TrNext - Tr', {Tr: vars.Tr, TrNext: TrNext})), 0.00001)) {
+            break;
+        }
+
+        if (iterTime > 100) {
+            break;
+        }
+    }
+    console.log(vars);
+    console.log(iterMap);
 }
